@@ -28,7 +28,7 @@ This Telegram chatbot is designed to interact with users on the Telegram platfor
 
 1. Clone the repository:
 
-   ```bash
+   
    git clone https://github.com/OueSan/ChatBot-Telegram-Personal-Fianances.git
 
    ```
