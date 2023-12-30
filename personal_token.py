@@ -1,1 +1,1 @@
-private_token = 'YOUR_TOKEN_HERE'
+private_token = '6941131183:AAHbb9S9QLjp9Src5mZkptRXNKnL_nzdjro'

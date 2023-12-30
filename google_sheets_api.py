@@ -42,34 +42,38 @@ class GoogleSheets():
         except HttpError as err:
             print(err)
 
-    def input_entry(self, value, category,coments):
+    def input_entry(self, value, category, comments):
         try:
             body = {
-                'values': [[value, category, coments,datetime.now().strftime('%d/%m/%Y, %H:%M:%S')]]
+                'values': [[value, category, comments, datetime.now().strftime('%d/%m/%Y, %H:%M:%S')]]
             }
             result = self.service.spreadsheets().values().append(
-                spreadsheetId='1n8WV4Ccw8hxPDSJ64hSRTIWRRuNz148H52ZWLbAEhfo', range='inflows!A2:D2',
+                spreadsheetId='1n8WV4Ccw8hxPDSJ64hSRTIWRRuNz148H52ZWLbAEhfo', range='inflows!A2:D',
                 valueInputOption='USER_ENTERED', body=body).execute()
-            
-            print(f"{result.get('updatedCells')} cells updated.")
+
+            print(f"Entry inserted: {value}, {category}, {comments}")
             return result
         except HttpError as error:
-            print(f"An error occurred: {error}")
+            print(f"An error occurred in input_entry: {error}")
             return error
-    def input_outs(self,value, classification, type, coments):
+        
+
+    def input_outs(self, value, classification, type, comments):
         try:
             body = {
-                'values': [[value, classification, type, coments,datetime.now().strftime('%d/%m/%Y, %H:%M:%S')]]
+                'values': [[value, classification, type, comments, datetime.now().strftime('%d/%m/%Y, %H:%M:%S')]]
             }
             result = self.service.spreadsheets().values().append(
-                spreadsheetId='1n8WV4Ccw8hxPDSJ64hSRTIWRRuNz148H52ZWLbAEhfo', range='outflows!A2:E2',
+                spreadsheetId='1n8WV4Ccw8hxPDSJ64hSRTIWRRuNz148H52ZWLbAEhfo', range='outflows!A2:E',
                 valueInputOption='USER_ENTERED', body=body).execute()
-            
-            print(f"{result.get('updatedCells')} cells updated.")
+
+            print(f"Outflow inserted: {value}, {classification}, {type}, {comments}")
             return result
         except HttpError as error:
-            print(f"An error occurred: {error}")
+            print(f"An error occurred in input_outs: {error}")
             return error
+        
+
     def input_transfers(self, value, origin, destine, coments):
         try:
             body = {
@@ -84,6 +88,8 @@ class GoogleSheets():
         except HttpError as error:
             print(f"An error occurred: {error}")
             return error
+        
+        
     def show_report(self, column): 
         try:
             sheet = self.service.spreadsheets()
@@ -101,7 +107,7 @@ class GoogleSheets():
                 print(values[0][0])
                 return values[0][0]
             
-            elif column == 'Total Transfer':
+            elif column == 'Total Transfers':
                 result = sheet.values().get(spreadsheetId='1n8WV4Ccw8hxPDSJ64hSRTIWRRuNz148H52ZWLbAEhfo',range='reports!C2:C').execute()
                 values = result.get('values', [])
                 print(values) # If you want more values, change the range or way you access the value below
@@ -111,10 +117,10 @@ class GoogleSheets():
         except Exception as error:
             print(error)
 
-#google_sheets_api = GoogleSheets()
-#google_sheets_api.input_entry(100,'investments','facebook stock dividends')
-# google_sheets_api.input_outs(500,'fixed','cash','car repairs')
-# google_sheets_api.input_transfers(2000,'account 1','account 2','donation')
-# google_sheets_api.display_report('Total Entry')
-# google_sheets_api.display_report('Total Outs')
-# google_sheets_api.display_report('Total Transfers')
+ #google_sheets_api = GoogleSheets()
+# #google_sheets_api.input_entry(100,'investments','facebook stock dividends')
+# # google_sheets_api.input_outs(500,'fixed','cash','car repairs')
+# # google_sheets_api.input_transfers(2000,'account 1','account 2','donation')
+# # google_sheets_api.display_report('Total Entry')
+# # google_sheets_api.display_report('Total Outs')
+# # google_sheets_api.display_report('Total Transfers')

@@ -105,27 +105,45 @@ async def register_exit_step_5(update: Update, context: ContextTypes.DEFAULT_TYP
         await update.effective_chat.send_message("Okay, proceeding without comments", reply_markup=ReplyKeyboardRemove())
         return await finalize_exit(update, context)
     
+async def finalize_entry(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    try:
+        context.user_data['comment'] = update.message.text
+        print(context.user_data['category'])
+        print(context.user_data['value'])
+        print(context.user_data['comment'])
+
+        category = context.user_data['category']
+        value = context.user_data['value']
+        comment = context.user_data['comment']
+
+        google_sheets_api = GoogleSheets()
+        google_sheets_api.insert_entry(value, category, comment)
+    except Exception as error:
+        print('Error in finalize_entry:', error)
+
+    return ConversationHandler.END
+
 async def finalize_exit(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     try:
-        context.user_data['coment'] = update.message.text
+        context.user_data['comment'] = update.message.text
         print(context.user_data['classification'])
         print(context.user_data['exit_category'])
         print(context.user_data['exit_value'])
         print(context.user_data['comment'])
+
         value = context.user_data['exit_value']
         classification = context.user_data['classification']
         category = context.user_data['exit_category']
         comment = context.user_data['comment']
 
         google_sheets_api = GoogleSheets()
-        google_sheets_api.input_outs(value,classification,category,comment)
-        
-    except Exception as e:
-        print('Okay, proceeding without comments')
+        google_sheets_api.input_outs(value, classification, category, comment)
+    except Exception as error:
+        print('Error in finalize_exit:', error)
 
-    await update.message.reply_text("Exit registry succesfully!", reply_markup=ReplyKeyboardRemove())
-
+    await update.message.reply_text("Exit registry successfully!", reply_markup=ReplyKeyboardRemove())
     return ConversationHandler.END
+
 
 async def register_transfer_step_1(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     await update.message.reply_text("Which account are you transferring from?", reply_markup=ReplyKeyboardMarkup([["Account 1", "Account 2", "Account 3"]], one_time_keyboard=True))
